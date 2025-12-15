@@ -9,7 +9,7 @@ WeaponSounds_o WeaponSounds_orig = nullptr;
 
 void WeaponSounds(void* mobj) {
     auto obj = reinterpret_cast<Il2CppObject*>(mobj);
-    FieldInfo* bazooka = FieldHelper::FindField(obj->klass, "bazooka");
+    static FieldInfo* bazooka = FieldHelper::FindField(obj->klass, "bazooka");
     if (bazooka) FieldHelper::SetFieldValue<bool>(obj, bazooka, true);
     WeaponSounds_orig(mobj);
 }
@@ -18,6 +18,8 @@ void Hookz() {
     Hooks::init();
     Hooks::hook("WeaponSounds", "Update", reinterpret_cast<void*>(&WeaponSounds), &WeaponSounds_orig);
 }
+
+CreateThread(0, 0, (LPTHREAD_START_ROUTINE)Hookz, 0, 0, 0);
 ```
 
 searches all assemblies automatically. no need for namespace/assembly names
